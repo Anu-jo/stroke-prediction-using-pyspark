@@ -10,7 +10,7 @@ from pyspark.sql.functions import col,isnan,when,count
 import warnings
 warnings.filterwarnings("ignore")
 spark = SparkSession.builder.appName("dataPreprocessing").getOrCreate()
-df = spark.read.csv('healthcare-dataset-stroke-data.csv', header=True, inferSchema=True)
+df = spark.read.csv('data/healthcare-dataset-stroke-data.csv', header=True, inferSchema=True)
 df.printSchema()
 df.show()
 df_column=["bmi","smoking_status"]
@@ -25,7 +25,7 @@ df2.show()
 df_cleaned=df.where("smoking_status <> 'Unknown'")
 df_cleaned.show()
 df_new1=df_cleaned.toPandas()
-df_new1.to_csv("C:/Users/anujo/Desktop/M.Sc data science/big data/stroke_dataset.csv",index=False)
+df_new1.to_csv("outputs/stroke_dataset.csv",index=False)
 #----data sampling
 major_class = df_cleaned.filter(col("stroke") == 0)
 minor_class = df_cleaned.filter(col("stroke") == 1)
@@ -59,7 +59,7 @@ undersampled_data = sampled_majority_df.union(minor_class)
 undersampled_data.show()
 print("The data set size is:",undersampled_data.count(),len(undersampled_data.columns))
 undersampled_data1=undersampled_data.toPandas()
-undersampled_data1.to_csv("C:/Users/anujo/Desktop/M.Sc data science/big data/undersampled_dataset.csv",index=False)
+undersampled_data1.to_csv("outputs/undersampled_dataset.csv",index=False)
         
 from pyspark.ml.feature import VectorAssembler
 from pyspark.ml.classification import LogisticRegression
@@ -112,7 +112,7 @@ accuracy_log = evaluator_log.evaluate(predictions_log)
 print("Accuracy of logistic regression classifier model= %g" % accuracy_log)
 print("Test Error = %g" % (1.0 - accuracy_log))
 predictions_log=predictions_log.toPandas()
-predictions_log.to_csv("C:/Users/anujo/Desktop/M.Sc data science/big data/logistic_regression.csv",index=False)
+predictions_log.to_csv("outputs/logistic_regression.csv",index=False)
 
 #decision tree model
 dt = DecisionTreeClassifier(labelCol="stroke", featuresCol="features",predictionCol="prediction_dec")
@@ -123,7 +123,7 @@ accuracy_decision = evaluator_decision.evaluate(predictions_decision)
 print("Accuracy of decision tree classifier model= %g" % accuracy_decision)
 print("Test Error = %g" % (1.0 - accuracy_decision))
 predictions_decision=predictions_decision.toPandas()
-predictions_decision.to_csv("C:/Users/anujo/Desktop/M.Sc data science/big data/decision_tree.csv",index=False)
+predictions_decision.to_csv("outputs/decision_tree.csv",index=False)
 
 #random forest model
 rf = RandomForestClassifier(labelCol="stroke", featuresCol="features",predictionCol="prediction_ran", numTrees=10)
@@ -134,4 +134,4 @@ accuracy_random = evaluator_random.evaluate(predictions_random)
 print("Accuracy random forest classifier model= %g" % accuracy_random)
 print("Test Error = %g" % (1.0 - accuracy_random))
 predictions_random=predictions_random.toPandas()
-predictions_random.to_csv("C:/Users/anujo/Desktop/M.Sc data science/big data/random_forest.csv",index=False)
+predictions_random.to_csv("outputs/random_forest.csv",index=False)
