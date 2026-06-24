@@ -25,7 +25,7 @@ df2.show()
 df_cleaned=df.where("smoking_status <> 'Unknown'")
 df_cleaned.show()
 df_new1=df_cleaned.toPandas()
-df_new1.to_csv("outputs/stroke_dataset.csv",index=False)
+df_new1.to_csv("data/stroke_dataset.csv",index=False)
 #----data sampling
 major_class = df_cleaned.filter(col("stroke") == 0)
 minor_class = df_cleaned.filter(col("stroke") == 1)
@@ -52,7 +52,7 @@ oversampled_data = oversampled_minority_df.union(df_cleaned.filter(df_cleaned.st
 # oversampled_heart_df.show()
 print("The data set size is:",oversampled_data.count(),len(oversampled_data.columns))
 oversampled_data1=oversampled_data.toPandas()
-oversampled_data1.to_csv("C:/Users/anujo/Desktop/M.Sc data science/big data/oversampled_dataset.csv",index=False)
+oversampled_data1.to_csv("outputs/oversampled_dataset.csv",index=False)
 #----data undersmpling
 sampled_majority_df = major_class.sample(True, 1/ratio)
 undersampled_data = sampled_majority_df.union(minor_class)
